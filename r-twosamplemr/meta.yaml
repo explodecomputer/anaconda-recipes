@@ -1,0 +1,85 @@
+{% set version = '0.4.14' %}
+
+{% set posix = 'm2-' if win else '' %}
+{% set native = 'm2w64-' if win else '' %}
+
+package:
+  name: r-twosamplemr
+  version: {{ version|replace("-", "_") }}
+
+source:
+
+  git_url: https://github.com/MRCIEU/TwoSampleMR
+  git_tag: 0.4.14
+
+build:
+  merge_build_host: True  # [win]
+  # If this is a new build for the same version, increment the build number.
+  number: 0
+
+  # This is required to make R link correctly on Linux.
+  rpaths:
+    - lib/R/lib/
+    - lib/
+
+# Suggests: ggplot2, gridExtra, cowplot, plyr, reshape2, stringr, knitr, markdown, gtable, RMySQL, rmarkdown, MRInstruments, MendelianRandomization, MRPRESSO, dplyr, igraph, mr.raps, psych
+requirements:
+  build:
+    - {{posix}}filesystem        # [win]
+    - {{posix}}git
+    - {{posix}}zip               # [win]
+
+  host:
+    - r-base
+    - r-rcurl
+    - r-data.table
+    - r-googleauthr >=0.6.2
+    - r-httpuv
+    - r-jsonlite
+    - r-meta
+
+  run:
+    - r-base
+    - r-rcurl
+    - r-data.table
+    - r-googleauthr >=0.6.2
+    - r-httpuv
+    - r-jsonlite
+    - r-meta
+
+test:
+  commands:
+    # You can put additional test commands to be run here.
+    - $R -e "library('TwoSampleMR')"           # [not win]
+    - "\"%R%\" -e \"library('TwoSampleMR')\""  # [win]
+
+  # You can also put a file called run_test.py, run_test.sh, or run_test.bat
+  # in the recipe that will be run at test time.
+
+  # requires:
+    # Put any additional test requirements here.
+
+about:
+  home: https://github.com/MRCIEU/TwoSampleMR
+  license: Artistic-2.0
+  summary: See title
+  license_family: OTHER
+
+# The original CRAN metadata for this package was:
+
+# Package: TwoSampleMR
+# Title: Two Sample MR functions and interface to MR Base database
+# Version: 0.4.14
+# Authors@R: c(person("Gibran", "Hemani", email = "g.hemani@bristol.ac.uk", role = c("aut", "cre")), person("Philip", "Haycock", email = "philip.haycock@bristol.ac.uk", role = c("aut")), person("Jie", "Zheng", email = "Jie.Zheng@bristol.ac.uk", role = c("aut")), person("Tom", "Gaunt", email = "Tom.Gaunt@bristol.ac.uk", role = c("aut")), person("Ben", "Elsworth", email = "Ben.Elsworth@bristol.ac.uk", role = c("aut")) )
+# Description: See title
+# Depends: R (>= 3.1.0)
+# Suggests: ggplot2, gridExtra, cowplot, plyr, reshape2, stringr, knitr, markdown, gtable, RMySQL, rmarkdown, MRInstruments, MendelianRandomization, MRPRESSO, dplyr, igraph, mr.raps, psych
+# Imports: meta, jsonlite, RCurl, data.table, googleAuthR (>= 0.6.2), httpuv
+# License: Artistic-2.0
+# LazyData: true
+# VignetteBuilder: knitr
+# RoxygenNote: 6.1.0
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml
